@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -46,11 +47,28 @@ public class StoryGraph : EditorWindow
 
         toolbar.Add(fileNameTextField);
 
+        toolbar.Add(new Button(() => RequestDataOperation(true)) { text = "Save Data" });
+
         var nodeCreateButton = new Button(() => { _graphView.CreateNode("Story Node"); });
         nodeCreateButton.text = "Create Node";
 
         toolbar.Add(nodeCreateButton);
         rootVisualElement.Add(toolbar);
+    }
+
+    private void RequestDataOperation(bool save)
+    {
+        if (string.IsNullOrEmpty(_fileName))
+        {
+            EditorUtility.DisplayDialog("Invalid file name", "Please enter a valid file name", "OK");
+        }
+
+        var saveUtiity = GraphSaveUtility.GetInstance(_graphView);
+
+        if (save)
+        {
+            saveUtiity.SaveGraph(_fileName);
+        }
     }
 
     private void OnDisable()
