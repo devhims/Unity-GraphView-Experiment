@@ -7,6 +7,8 @@ using UnityEngine.UIElements;
 
 public class StoryGraphView : GraphView
 {
+    public readonly Vector2 DefaultNodeSize = new Vector2(300, 200);
+
     public StoryGraphView()
     {
         SetupZoom(ContentZoomer.DefaultMinScale, ContentZoomer.DefaultMaxScale);
@@ -47,5 +49,33 @@ public class StoryGraphView : GraphView
     Port GeneratePort(StoryNode node, Direction portDirection, Port.Capacity capacity = Port.Capacity.Single)
     {
         return node.InstantiatePort(Orientation.Horizontal, portDirection, capacity, typeof(float));
+    }
+
+    public StoryNode CreateStoryNode(string nodeName)
+    {
+
+        var storyNode = new StoryNode
+        {
+            title = nodeName,
+            CardText = nodeName,
+            GUID = Guid.NewGuid().ToString()
+        };
+
+        var inputPort = GeneratePort(storyNode, Direction.Input, Port.Capacity.Multi);
+        inputPort.portName = "Input";
+        storyNode.inputContainer.Add(inputPort);
+
+
+        storyNode.RefreshExpandedState();
+        storyNode.RefreshPorts();
+
+        storyNode.SetPosition(new Rect(new Vector2(100, 100), DefaultNodeSize));
+
+        return storyNode;
+    }
+
+    public void CreateNode(string nodeName)
+    {
+        AddElement(CreateStoryNode(nodeName));
     }
 }
