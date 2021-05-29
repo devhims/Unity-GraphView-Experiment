@@ -66,12 +66,34 @@ public class StoryGraphView : GraphView
         storyNode.inputContainer.Add(inputPort);
 
 
+        var button = new Button(() =>
+        {
+            AddChoicePort(storyNode);
+        });
+        button.text = "Create Port";
+
+        storyNode.titleContainer.Add(button);
+
+
         storyNode.RefreshExpandedState();
         storyNode.RefreshPorts();
 
         storyNode.SetPosition(new Rect(new Vector2(100, 100), DefaultNodeSize));
 
         return storyNode;
+    }
+
+    void AddChoicePort(StoryNode storyNode)
+    {
+        var generatedPort = GeneratePort(storyNode, Direction.Output);
+
+        var outputPortCount = storyNode.outputContainer.Query("connector").ToList().Count;
+        generatedPort.portName = $"Port {outputPortCount}";
+
+        storyNode.outputContainer.Add(generatedPort);
+        storyNode.RefreshPorts();
+        storyNode.RefreshExpandedState();
+        storyNode.outputContainer.Add(generatedPort);
     }
 
     public void CreateNode(string nodeName)
