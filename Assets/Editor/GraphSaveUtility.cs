@@ -47,6 +47,7 @@ public class GraphSaveUtility
             dialogContainer.DialogueNodeData.Add(new StoryNodeData
             {
                 NodeGUID = node.GUID,
+                StoryTitle = node.CardTitle,
                 StoryText = node.CardText,
                 Position = node.GetPosition().position
             });

@@ -56,7 +56,6 @@ public class StoryGraphView : GraphView
 
         var storyNode = new StoryNode
         {
-            title = nodeName,
             CardText = nodeName,
             GUID = Guid.NewGuid().ToString()
         };
@@ -66,6 +65,17 @@ public class StoryGraphView : GraphView
         storyNode.inputContainer.Add(inputPort);
 
 
+        var storyTitle = new TextField(string.Empty);
+        storyTitle.RegisterValueChangedCallback(evt =>
+        {
+            storyTitle.value = evt.newValue;
+            storyNode.CardTitle = evt.newValue;
+        });
+        storyTitle.SetValueWithoutNotify(storyNode.title);
+        //storyNode.CardTitle = storyTitle.text;
+        storyNode.titleContainer.Add(storyTitle);
+
+
         var button = new Button(() =>
         {
             AddChoicePort(storyNode);
@@ -73,6 +83,21 @@ public class StoryGraphView : GraphView
         button.text = "Create Port";
 
         storyNode.titleContainer.Add(button);
+
+
+ 
+
+ 
+
+        var textField = new TextField(string.Empty);
+        textField.RegisterValueChangedCallback(evt =>
+        {
+            storyNode.CardText = evt.newValue;
+            //storyNode.title = evt.newValue;
+        });
+
+        //textField.SetValueWithoutNotify(storyNode.title);
+        storyNode.mainContainer.Add(textField);
 
 
         storyNode.RefreshExpandedState();
